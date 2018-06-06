@@ -7,7 +7,7 @@ http.createServer(function (req, res) {
         service: 'gmail',
         auth: {
             user: 'weaselwiz7@gmail.com',
-            pass: 'snowFlake88'
+            pass: ''
         }
     });
 
