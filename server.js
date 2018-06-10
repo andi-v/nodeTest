@@ -3,37 +3,40 @@ const fs = require('fs');
 const path = require('path');
 
 http.createServer((req, res) => {
-    const dirPath1 = 'D:/IMAGES/smth';
-    const dirPath2 = 'D:/IMAGES/smth2'; // bigger directory
+    const oldDirPath = "D:/IMAGES/Others'/Co";
+    const newDirPath = "D:/IMAGES/Others'/Co - Copy"; // bigger directory
 
-    fs.readdir(dirPath2, (err, files) => {
+    fs.readdir(newDirPath, (err, files) => {
         if (err) {
             console.error("Could not list the dir.", err);
         }
 
-        let newFilesSize = 0;
+        let newFilesSize = 0,
+            newFiles = [];
 
         // Iterate 2nd folder's files and
         // check if present in 1st folder also
         files.forEach( (file, index) => {
-            const filePath1 = path.join(dirPath1, file);
-            const filePath2 = path.join(dirPath2, file);
+            const filePath1 = path.join(oldDirPath, file);
+            const filePath2 = path.join(newDirPath, file);
             var currentFileSize = 0;
             
             fs.stat(filePath2, (err, stats) => {
                 currentFileSize = stats.size;
-                console.log(currentFileSize + " bytes");
-            });
-            console.log(currentFileSize);
-            
-            fs.stat(filePath1, (err, stats) => {
-                if (err) {
-                    //console.log(filePath2);
-                    newFilesSize += currentFileSize;
-                }
+
+                fs.stat(filePath1, (err, stats) => {
+                    if (err) {
+                        newFilesSize += currentFileSize;
+                        newFiles.push(file);
+                    }
+                    if (index == files.length-1){
+                        console.log(`There are ${newFiles.length} new files,` + 
+                                    ` having ${newFilesSize/1048576} MB :`);
+                        for (let i in newFiles)
+                            console.log(newFiles[i]);
+                    }
+                });
             });
         });
-
-        console.log(`New files have ${newFilesSize} bytes`);
     });
 }).listen(8081);
