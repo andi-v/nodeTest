@@ -14,8 +14,8 @@ http.createServer((req, res) => {
         let newFilesSize = 0,
             newFiles = [];
 
-        // Iterate 2nd folder's files and
-        // check if present in 1st folder also
+        // Iterate the new folder's files and
+        // check if present in the old folder also
         files.forEach( (file, index) => {
             const filePath1 = path.join(oldDirPath, file);
             const filePath2 = path.join(newDirPath, file);
